@@ -15,6 +15,7 @@ require("lazy").setup({
 	{ import = "plugins" },
 	{ import = "plugins.lsp" },
 	{ import = "plugins.python" },
+	{ import = "plugins.sql" },
 }, {
 	checker = {
 		enabled = true,
