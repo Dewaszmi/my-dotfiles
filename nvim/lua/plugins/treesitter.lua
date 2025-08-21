@@ -22,18 +22,13 @@ return {
 			},
 			-- ensure these language parsers are installed
 			ensure_installed = {
-				"json",
 				"java",
-				"javascript",
-				"html",
-				"css",
 				"bash",
 				"lua",
 				"vim",
 				"dockerfile",
 				"gitignore",
 				"vimdoc",
-				"c",
 			},
 			incremental_selection = {
 				enable = true,

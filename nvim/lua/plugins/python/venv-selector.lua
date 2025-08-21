@@ -8,7 +8,7 @@ return {
 	},
 	lazy = false,
 	keys = {
-		{ "<leader>vs", "<cmd>VenvSelect<cr>", desc = "Select virtual environment" },
+		{ "<leader>venvs", "<cmd>VenvSelect<cr>", desc = "Select virtual environment" },
 	},
 	opts = {
 		notify_user_on_venv_activation = true,
