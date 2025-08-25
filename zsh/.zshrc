@@ -1,3 +1,5 @@
+export PATH="$PATH:/home/dewaszmi/.local/bin"
+
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.config/oh-my-zsh"
 
