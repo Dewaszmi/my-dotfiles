@@ -13,11 +13,7 @@ return {
 		local dap_python = require("dap-python")
 		local venv_selector = require("venv-selector")
 
-		-- Set Python interpreter (from venv or fallback)
-		local python_path = venv_selector.python() or "python3"
-		dap_python.setup(python_path)
-
-		-- Configure dap-ui
+		-- ===== DAP UI setup =====
 		dapui.setup()
 		dap.listeners.after.event_initialized["dapui_config"] = function()
 			dapui.open()
@@ -29,18 +25,38 @@ return {
 			dapui.close()
 		end
 
-		-- Keymaps
-		local map = vim.keymap.set
-		-- General debugging
-		map("n", "<F5>", dap.continue)
-		map("n", "<F9>", dap.toggle_breakpoint)
-		map("n", "<F10>", dap.step_over)
-		map("n", "<F11>", dap.step_into)
-		map("n", "<F12>", dap.step_out)
-		map("n", "<Leader>du", dapui.toggle) -- toggle dap-ui
+		-- ===== Python interpreter =====
+		local python_path = venv_selector.python() or "python3"
+		dap_python.setup(python_path)
 
-		-- Python test debugging
-		map("n", "<Leader>dt", dap_python.test_method) -- debug current test method
-		map("n", "<Leader>dc", dap_python.test_class) -- debug current test class
+		-- ===== Python-only keymaps =====
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = "python",
+			callback = function()
+				local map = vim.keymap.set
+
+				-- Base debugging
+				map("n", "<F5>", dap.continue, { desc = "continue", noremap = true, silent = true })
+				map("n", "<F9>", dap.toggle_breakpoint, { desc = "toggle breakpoint", noremap = true, silent = true })
+				map("n", "<F10>", dap.step_over, { desc = "step over", noremap = true, silent = true })
+				map("n", "<F11>", dap.step_into, { desc = "step into", noremap = true, silent = true })
+				map("n", "<F12>", dap.step_out, { desc = "step out", noremap = true, silent = true })
+				map("n", "<leader>du", dapui.toggle, { desc = "toggle dap ui", noremap = true, silent = true })
+
+				-- Debug tests
+				map(
+					"n",
+					"<leader>dt",
+					dap_python.test_method,
+					{ desc = "debug test method", noremap = true, silent = true }
+				)
+				map(
+					"n",
+					"<leader>dc",
+					dap_python.test_class,
+					{ desc = "debug test class", noremap = true, silent = true }
+				)
+			end,
+		})
 	end,
 }

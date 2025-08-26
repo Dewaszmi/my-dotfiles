@@ -12,15 +12,15 @@ return {
 	config = function()
 		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
+		local util = require("lspconfig.util")
+		local venv_selector = require("venv-selector")
 		local keymap = vim.keymap
 
-		-- LSP keymaps
+		-- ===== LSP keymaps =====
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 			callback = function(ev)
 				local opts = { buffer = ev.buf, silent = true }
-
-				-- Navigation
 				keymap.set(
 					"n",
 					"gd",
@@ -46,8 +46,6 @@ return {
 					"<cmd>Telescope lsp_references<CR>",
 					{ desc = "Show references", buffer = ev.buf }
 				)
-
-				-- Actions
 				keymap.set(
 					{ "n", "v" },
 					"<leader>ca",
@@ -55,8 +53,6 @@ return {
 					{ desc = "Code action", buffer = ev.buf }
 				)
 				keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol", buffer = ev.buf })
-
-				-- Diagnostics
 				keymap.set(
 					"n",
 					"<leader>D",
@@ -66,26 +62,32 @@ return {
 				keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Line diagnostics", buffer = ev.buf })
 				keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic", buffer = ev.buf })
 				keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic", buffer = ev.buf })
-
-				-- Documentation
 				keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover docs", buffer = ev.buf })
 				keymap.set("n", "<leader>rs", ":LspRestart<CR>", { desc = "Restart LSP", buffer = ev.buf })
 			end,
 		})
 
-		-- Capabilities for nvim-cmp
+		-- ===== Capabilities for nvim-cmp =====
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
-		-- Diagnostic signs
+		-- ===== Diagnostic signs =====
 		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 		for type, icon in pairs(signs) do
 			vim.fn.sign_define("DiagnosticSign" .. type, { text = icon, texthl = "DiagnosticSign" .. type, numhl = "" })
 		end
 
-		-- Neodev for Lua development
+		-- ===== Inline diagnostics =====
+		vim.diagnostic.config({
+			virtual_text = { prefix = "●", spacing = 2 },
+			signs = true,
+			underline = true,
+			update_in_insert = false,
+		})
+
+		-- ===== Neodev for Lua =====
 		require("neodev").setup({ library = { vimruntime = true, types = true } })
 
-		-- LSP setups
+		-- ===== LSP setups =====
 		lspconfig.lua_ls.setup({
 			capabilities = capabilities,
 			settings = {
@@ -96,14 +98,17 @@ return {
 			},
 		})
 
+		-- ===== Python LSP (Pyright) =====
+		local python_path = venv_selector.python() or "python3"
+
 		lspconfig.pyright.setup({
 			capabilities = capabilities,
+			root_dir = util.root_pattern(".git", "main.py"),
 			before_init = function(_, config)
-				local venv_path = require("venv-selector").python()
-				if venv_path then
+				if python_path then
 					config.settings = config.settings or {}
 					config.settings.python = config.settings.python or {}
-					config.settings.python.pythonPath = venv_path
+					config.settings.python.pythonPath = python_path
 				end
 			end,
 		})
