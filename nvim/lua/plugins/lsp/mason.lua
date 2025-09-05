@@ -24,6 +24,8 @@ return {
 				"lua_ls",
 				"pyright",
 			},
+			automatic_installation = true,
+			automatic_setup = false,
 		})
 
 		mason_tool_installer.setup({

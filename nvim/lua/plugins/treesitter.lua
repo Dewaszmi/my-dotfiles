@@ -20,21 +20,37 @@ return {
 			autotag = {
 				enable = true,
 			},
+			-- enable rainbow parentheses
+			rainbow = {
+				enable = true,
+				extended_mode = true,
+				max_file_lines = 1000,
+			},
+			-- fold code blocks
+			fold = {
+				enable = true,
+			},
 			-- ensure these language parsers are installed
 			ensure_installed = {
+				"python",
 				"java",
+				"sql",
 				"bash",
 				"lua",
 				"vim",
+				"vimdoc",
 				"dockerfile",
 				"gitignore",
-				"vimdoc",
+				"markdown",
+				"markdown_inline",
+				"tmux",
+				"sway",
 			},
 			incremental_selection = {
 				enable = true,
 				keymaps = {
-					init_selection = "<C-space>",
-					node_incremental = "<C-space>",
+					init_selection = "<C-s>",
+					node_incremental = "<C-s>",
 					scope_incremental = false,
 					node_decremental = "<bs>",
 				},

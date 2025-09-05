@@ -1,16 +1,21 @@
 return {
 	"linux-cultist/venv-selector.nvim",
-	dependencies = {
-		"neovim/nvim-lspconfig",
-		"mfussenegger/nvim-dap",
-		"mfussenegger/nvim-dap-python",
-		{ "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
-	},
-	lazy = false,
-	keys = {
-		{ "<leader>venvs", "<cmd>VenvSelect<cr>", desc = "Select virtual environment" },
-	},
-	opts = {
-		notify_user_on_venv_activation = true,
-	},
+	ft = "python",
+	config = function()
+		local venv_selector = require("venv-selector")
+
+		-- Automatically switch Python interpreter for LSP & DAP
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = "python",
+			callback = function()
+				-- Change Python path dynamically for DAP
+				local python_path = venv_selector.python() or vim.fn.exepath("python3")
+				local dap_python = require("dap-python")
+				dap_python.setup(python_path)
+
+				-- Optional: show venv in statusline
+				vim.opt.statusline:append(" [" .. venv_selector.name() .. "] ")
+			end,
+		})
+	end,
 }

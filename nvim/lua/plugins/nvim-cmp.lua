@@ -43,18 +43,22 @@ return {
 				{ name = "buffer" }, -- text within current buffer
 				{ name = "path" }, -- file system paths
 			}),
+			-- format completions
 			formatting = {
-				format = function(entry, vim_item)
-					local source_mapping = {
-						copilot = "[ Copilot]",
-						nvim_lsp = "[LSP]",
-						luasnip = "[LuaSnip]",
-						buffer = "[Buf]",
-						path = "[Path]",
-					}
-					vim_item.menu = source_mapping[entry.source.name] or ("[" .. entry.source.name .. "]")
-					return vim_item
-				end,
+				format = lspkind.cmp_format({
+					mode = "symbol_text",
+					maxwidth = 50,
+					before = function(entry, vim_item)
+						local source_mapping = {
+							copilot = "[ Copilot]",
+							luasnip = "[LuaSnip]",
+							buffer = "[Buf]",
+							path = "[Path]",
+						}
+						vim_item.menu = source_mapping[entry.source.name] or ("[" .. entry.source.name .. "]")
+						return vim_item
+					end,
+				}),
 			},
 		})
 

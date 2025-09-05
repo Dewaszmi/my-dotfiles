@@ -77,12 +77,19 @@ return {
 		end
 
 		-- ===== Inline diagnostics =====
-		vim.diagnostic.config({
-			virtual_text = { prefix = "●", spacing = 2 },
-			signs = true,
-			underline = true,
-			update_in_insert = false,
-		})
+		local diagnostics_visible = true
+
+		function ToggleInlineDiagnostics()
+			diagnostics_visible = not diagnostics_visible
+			vim.diagnostic.config({
+				virtual_text = diagnostics_visible and { prefix = "●", spacing = 2 } or false,
+				signs = diagnostics_visible,
+				underline = diagnostics_visible,
+				update_in_insert = not diagnostics_visible,
+			})
+		end
+
+		vim.keymap.set("n", "<leader>ld", ToggleInlineDiagnostics, { desc = "Toggle inline diagnostics" })
 
 		-- ===== Neodev for Lua =====
 		require("neodev").setup({ library = { vimruntime = true, types = true } })
@@ -98,18 +105,21 @@ return {
 			},
 		})
 
-		-- ===== Python LSP (Pyright) =====
-		local python_path = venv_selector.python() or "python3"
+		-- ===== Python LSP (Pyright) with dynamic venv =====
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = "python",
+			callback = function()
+				local python_path = venv_selector.python() or "python3"
 
-		lspconfig.pyright.setup({
-			capabilities = capabilities,
-			root_dir = util.root_pattern(".git", "main.py"),
-			before_init = function(_, config)
-				if python_path then
-					config.settings = config.settings or {}
-					config.settings.python = config.settings.python or {}
-					config.settings.python.pythonPath = python_path
-				end
+				lspconfig.pyright.setup({
+					capabilities = capabilities,
+					root_dir = util.root_pattern(".git", "main.py"),
+					before_init = function(_, config)
+						config.settings = config.settings or {}
+						config.settings.python = config.settings.python or {}
+						config.settings.python.pythonPath = python_path
+					end,
+				})
 			end,
 		})
 	end,
