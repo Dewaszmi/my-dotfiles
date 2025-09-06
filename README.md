@@ -11,3 +11,8 @@ I use Waybar and Wofi for UI, Mako for notifications, and Grim + Slurp for scree
 #### Neovim
 
 I write Java, Python and SQL so my Neovim setup is oriented around these languages, but the general template is taken from https://www.josean.com/posts/how-to-setup-neovim-2024
+
+
+#### Other
+
+font = JetBrainsMono from NerdFonts

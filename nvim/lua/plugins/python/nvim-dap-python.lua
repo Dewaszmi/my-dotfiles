@@ -11,7 +11,6 @@ return {
 		local dap = require("dap")
 		local dapui = require("dapui")
 		local dap_python = require("dap-python")
-		local venv_selector = require("venv-selector")
 
 		-- ===== DAP UI setup =====
 		dapui.setup()
@@ -26,7 +25,7 @@ return {
 		end
 
 		-- ===== Python interpreter =====
-		local python_path = venv_selector.python() or "python3"
+		local python_path = require("venv-selector").python() or "python3"
 		dap_python.setup(python_path)
 
 		-- ===== Python-only keymaps =====

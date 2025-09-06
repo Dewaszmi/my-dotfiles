@@ -13,7 +13,6 @@ return {
 		local lspconfig = require("lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 		local util = require("lspconfig.util")
-		local venv_selector = require("venv-selector")
 		local keymap = vim.keymap
 
 		-- ===== LSP keymaps =====
@@ -70,14 +69,21 @@ return {
 		-- ===== Capabilities for nvim-cmp =====
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
-		-- ===== Diagnostic signs =====
-		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+		-- ===== Diagnostic signs & config =====
+		local signs = { Error = "", Warn = "", Hint = "󰠠", Info = "" }
+		local sign_defs = {}
 		for type, icon in pairs(signs) do
-			vim.fn.sign_define("DiagnosticSign" .. type, { text = icon, texthl = "DiagnosticSign" .. type, numhl = "" })
+			sign_defs[type] = { text = icon, texthl = "Diagnostic" .. type }
 		end
 
-		-- ===== Inline diagnostics =====
 		local diagnostics_visible = true
+
+		vim.diagnostic.config({
+			signs = sign_defs,
+			virtual_text = { prefix = "●", spacing = 2 },
+			underline = true,
+			update_in_insert = false,
+		})
 
 		function ToggleInlineDiagnostics()
 			diagnostics_visible = not diagnostics_visible
@@ -109,7 +115,7 @@ return {
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = "python",
 			callback = function()
-				local python_path = venv_selector.python() or "python3"
+				local python_path = require("venv-selector").python() or "python3"
 
 				lspconfig.pyright.setup({
 					capabilities = capabilities,
