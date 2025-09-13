@@ -19,13 +19,23 @@ return {
 			},
 		})
 
+		-- Setup pyright via mason handlers to avoid double attachment
+		local lspconfig = require("lspconfig")
 		mason_lspconfig.setup({
-			ensure_installed = {
-				"lua_ls",
-				"pyright",
+			ensure_installed = { "lua_ls", "pyright" },
+			handlers = {
+				function(server_name)
+					lspconfig[server_name].setup({
+						on_attach = function(client, bufnr)
+							local opts = { buffer = bufnr, silent = true }
+							vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+							vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+							vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+							vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+						end,
+					})
+				end,
 			},
-			automatic_installation = true,
-			automatic_setup = false,
 		})
 
 		mason_tool_installer.setup({

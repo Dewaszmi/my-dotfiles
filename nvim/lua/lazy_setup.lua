@@ -25,3 +25,5 @@ require("lazy").setup({
 		notify = false,
 	},
 })
+
+-- TODO: change structure to be more modular
