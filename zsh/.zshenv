@@ -1,5 +1,0 @@
-export ZSH_COMPDUMP="$HOME/.cache/zcompdump/.zcompdump"
-export EDITOR="nvim"
-export ZDOTDIR="$HOME/.config/zsh"
-export FZF_DEFAULT_OPTS="--height 40% --layout reverse --border"
-export DOTFILES_PATH="$HOME/.dotfilesgit/"

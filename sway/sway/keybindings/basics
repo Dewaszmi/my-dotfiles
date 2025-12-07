@@ -1,0 +1,47 @@
+# Basics
+bindsym $mod+Return exec $term
+bindsym $mod+q kill
+bindsym $mod+d exec $menu
+bindsym $mod+Shift+r reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
+floating_modifier $mod normal
+
+# Lock Screen
+bindsym $mod+c exec --no-startup-id $SWAY_DIR/scripts/swaylock.sh
+# bindsym $mod+c exec hyprlock
+
+# Emojis
+# bindsym $mod+comma exec smile
+bindsym $mod+comma exec --no-startup-id qs -c noctalia-shell ipc call launcher emoji
+
+# Toggle noctalia-shell bar
+bindsym $mod+shift+b exec --no-startup-id qs -c noctalia-shell ipc call bar toggle
+
+# Power Menu
+bindsym $mod+p exec --no-startup-id wlogout
+# bindsym $mod+p exec --no-startup-id qs -c noctalia-shell ipc call sessionMenu toggle
+
+# Switch to prev/next workspace
+bindsym $mod+slash workspace next
+bindsym $mod+period workspace prev
+
+# Audio controls
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+
+# Brightness controls
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
+bindsym XF86MonBrightnessUp exec brightnessctl set +10%
+
+
+# Screenshots
+bindsym F12 exec grimshot save screen ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym Shift+F12 exec grimshot save active ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym ctrl+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+
+# Media keys
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioStop exec playerctl stop
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
