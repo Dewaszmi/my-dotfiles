@@ -1,5 +1,7 @@
 # My dotfiles
 
+Duplicated folders are necessary for stow to work (tried and couldn't find a different way)
+
 |      |       |
 |----- | ----- |
 | Distro | arch btw |
