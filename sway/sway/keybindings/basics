@@ -36,9 +36,9 @@ bindsym XF86MonBrightnessUp exec brightnessctl set +10%
 
 
 # Screenshots
-bindsym F12 exec grimshot save screen ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
-bindsym Shift+F12 exec grimshot save active ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
-bindsym ctrl+F12 exec grimshot save area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym F12 exec grimshot copy screen ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym Shift+F12 exec grimshot copy active ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym ctrl+F12 exec grimshot copy area ~/Pictures/Screenshots/screenshot_$(date +%Y-%m-%d_%H-%M-%S).png
 
 # Media keys
 bindsym XF86AudioPlay exec playerctl play-pause

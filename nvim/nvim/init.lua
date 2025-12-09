@@ -244,10 +244,15 @@ rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.autoindent = true
+
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-	"NMAC427/guess-indent.nvim", -- Detect tabstop and shiftwidth automatically
+	-- "NMAC427/guess-indent.nvim", -- Detect tabstop and shiftwidth automatically
 
 	-- NOTE: Plugins can also be added by using a table,
 	-- with the first argument being the link and the following
@@ -407,6 +412,15 @@ require("lazy").setup({
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
+				defaults = {
+					mappings = {
+						i = {
+							["<Tab>"] = require("telescope.actions").select_tab,
+							["<c-tab>"] = require("telescope.actions").select_tab,
+						},
+					},
+				},
+
 				-- defaults = {
 				--   mappings = {
 				--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
@@ -1034,3 +1048,29 @@ require("lazy").setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+
+-- Go to next tab (circular)
+vim.keymap.set("n", "<Tab>", function()
+	local tab_count = vim.fn.tabpagenr("$")
+	local next_tab = vim.fn.tabpagenr() + 1
+	if next_tab > tab_count then
+		next_tab = 1
+	end
+	vim.cmd(next_tab .. "tabnext")
+end, { desc = "Go to next tab (circular)" })
+
+-- Go to previous tab (circular)
+vim.keymap.set("n", "<S-Tab>", function()
+	local tab_count = vim.fn.tabpagenr("$")
+	local prev_tab = vim.fn.tabpagenr() - 1
+	if prev_tab < 1 then
+		prev_tab = tab_count
+	end
+	vim.cmd(prev_tab .. "tabnext")
+end, { desc = "Go to previous tab (circular)" })
+
+-- Go to a specific tab (1-9)
+for i = 1, 9 do
+	vim.keymap.set("n", "<leader>" .. i, i .. "gt", { desc = "Go to tab " .. i })
+end
