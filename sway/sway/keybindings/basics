@@ -45,3 +45,8 @@ bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioStop exec playerctl stop
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
+
+bindsym $mod+Shift+z exec "swaymsg 'output * power off'"
+bindsym $mod+Shift+x exec "swaymsg 'output * power on'"
+
+bindsym $mod+KP_7 exec systemd-run --user ~/.config/sway/scripts/monitor_select.sh
