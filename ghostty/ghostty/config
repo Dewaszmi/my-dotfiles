@@ -1,6 +1,6 @@
 # Theme
 theme = coolnight
-background-opacity = 0.75
+background-opacity = 1.0
 
 # Font
 font-family = "JetBrains Mono Nerd Font Bold"
@@ -9,14 +9,14 @@ bold-is-bright = true
 font-size = 14
 
 # Appearance
-gtk-titlebar = false
+gtk-titlebar = true
 gtk-single-instance = true
 gtk-tabs-location = top
 gtk-wide-tabs = false
 window-padding-y = 50,0
 window-padding-x = 50,0
 window-padding-balance = true
-window-decoration = false
+window-decoration = true
 
 # Other
 mouse-hide-while-typing = true
@@ -29,3 +29,4 @@ confirm-close-surface = false
 keybind = ctrl+shift+comma=reload_config
 
 # Background = "#011423",
+cursor-style = block
