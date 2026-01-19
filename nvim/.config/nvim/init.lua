@@ -473,6 +473,12 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sn", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
 			end, { desc = "[S]earch [N]eovim files" })
+
+			-- Check TODOs in Telescope
+			local ok, todo_comments = pcall(require, "todo-comments")
+			if ok then
+				vim.keymap.set("n", "<leader>st", ":TodoTelescope<CR>", { desc = "[S]earch [T]ODOs" })
+			end
 		end,
 	},
 
@@ -696,10 +702,8 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				-- clangd = {},
-				-- gopls = {},
 				pyright = {},
-				-- rust_analyzer = {},
+				bashls = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
 				-- Some languages (like typescript) have entire language plugins that can be useful:
@@ -741,6 +745,14 @@ require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+
+				-- bash
+				"shellcheck",
+				"beautysh",
+
+				-- python
+				"ruff",
+				"isort",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -905,27 +917,27 @@ require("lazy").setup({
 		},
 	},
 
-	-- { -- You can easily change to a different colorscheme.
-	-- 	-- Change the name of the colorscheme plugin below, and then
-	-- 	-- change the command in the config to whatever the name of that colorscheme is.
-	-- 	--
-	-- 	-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-	-- 	"folke/tokyonight.nvim",
-	-- 	priority = 1000, -- Make sure to load this before all the other start plugins.
-	-- 	config = function()
-	-- 		---@diagnostic disable-next-line: missing-fields
-	-- 		require("tokyonight").setup({
-	-- 			styles = {
-	-- 				comments = { italic = false }, -- Disable italics in comments
-	-- 			},
-	-- 		})
-	--
-	-- 		-- Load the colorscheme here.
-	-- 		-- Like many other themes, this one has different styles, and you could load
-	-- 		-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-	-- 		vim.cmd.colorscheme("tokyonight-night")
-	-- 	end,
-	-- },
+	{ -- You can easily change to a different colorscheme.
+		-- Change the name of the colorscheme plugin below, and then
+		-- change the command in the config to whatever the name of that colorscheme is.
+		--
+		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+		"folke/tokyonight.nvim",
+		priority = 1000, -- Make sure to load this before all the other start plugins.
+		config = function()
+			---@diagnostic disable-next-line: missing-fields
+			require("tokyonight").setup({
+				styles = {
+					comments = { italic = false }, -- Disable italics in comments
+				},
+			})
+
+			-- Load the colorscheme here.
+			-- Like many other themes, this one has different styles, and you could load
+			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+			vim.cmd.colorscheme("tokyonight-night")
+		end,
+	},
 
 	-- Highlight todo, notes, etc in comments
 	{
@@ -978,7 +990,7 @@ require("lazy").setup({
 		main = "nvim-treesitter.config", -- Sets main module to use for opts
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 		opts = {
-			ensure_installed = { "bash", "html", "lua", "markdown", "markdown_inline", "vimdoc" },
+			ensure_installed = { "bash", "html", "lua", "markdown", "markdown_inline", "vimdoc", "python" },
 			-- Autoinstall languages that are not installed
 			auto_install = true,
 			highlight = {
@@ -986,7 +998,7 @@ require("lazy").setup({
 				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
 				--  If you are experiencing weird indenting issues, add the language to
 				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
-				additional_vim_regex_highlighting = { "ruby" },
+				-- additional_vim_regex_highlighting = { "ruby" },
 			},
 			indent = { enable = true, disable = { "ruby" } },
 		},
@@ -1008,11 +1020,11 @@ require("lazy").setup({
 	--  Uncomment any of the lines below to enable them (you will need to restart nvim).
 	--
 	require("kickstart.plugins.debug"),
-	-- require 'kickstart.plugins.indent_line',
+	require("kickstart.plugins.indent_line"),
 	-- require 'kickstart.plugins.lint',
-	-- require 'kickstart.plugins.autopairs',
-	-- require 'kickstart.plugins.neo-tree',
-	-- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+	require("kickstart.plugins.autopairs"),
+	require("kickstart.plugins.neo-tree"),
+	require("kickstart.plugins.gitsigns"), -- adds gitsigns recommend keymaps
 
 	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
 	--    This is the easiest way to modularize your config.
@@ -1050,32 +1062,8 @@ require("lazy").setup({
 -- vim: ts=2 sts=2 sw=2 et
 --
 
--- Go to next tab (circular)
-vim.keymap.set("n", "<Tab>", function()
-	local tab_count = vim.fn.tabpagenr("$")
-	local next_tab = vim.fn.tabpagenr() + 1
-	if next_tab > tab_count then
-		next_tab = 1
-	end
-	vim.cmd(next_tab .. "tabnext")
-end, { desc = "Go to next tab (circular)" })
+-- Go to next tab
+vim.keymap.set("n", "]t", "gt", { desc = "Next Tab" })
 
--- Go to previous tab (circular)
-vim.keymap.set("n", "<S-Tab>", function()
-	local tab_count = vim.fn.tabpagenr("$")
-	local prev_tab = vim.fn.tabpagenr() - 1
-	if prev_tab < 1 then
-		prev_tab = tab_count
-	end
-	vim.cmd(prev_tab .. "tabnext")
-end, { desc = "Go to previous tab (circular)" })
-
--- Go to a specific tab (1-9)
-for i = 1, 9 do
-	vim.keymap.set("n", "<leader>" .. i, i .. "gt", { desc = "Go to tab " .. i })
-end
-
-vim.opt.termguicolors = false
-vim.cmd("colorscheme default")
-
-vim.api.nvim_set_hl(0, "Normal", { bg = "NONE", ctermbg = "NONE" })
+-- Go to previous tab
+vim.keymap.set("n", "[t", "gT", { desc = "Previous Tab" })
