@@ -21,6 +21,9 @@ return {
 			window = {
 				mappings = {
 					["\\"] = "close_window",
+					["/"] = "none",
+					n = "none",
+					N = "none",
 				},
 			},
 		},
