@@ -1,2 +1,0 @@
-bindsym $mod+b exec firefox
-bindsym $alt+f exec $files
