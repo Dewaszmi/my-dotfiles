@@ -18,6 +18,7 @@ export ZSH_COMPDUMP="$HOME/.cache/zcompdump/.zcompdump"
 export EDITOR="nvim"
 
 export PATH=$PATH:/home/dewaszmi/.spicetify
+export PATH=$PATH:/home/dewaszmi/.cargo/bin
 
 # Pyenv
 # export PYENV_ROOT="$HOME/.pyenv"
@@ -43,6 +44,7 @@ mkcd () {
 # Zoxide so i wont forget
 alias cd="z"
 
+# Better ls
 alias ls='lsd'
 alias l='ls -l'
 alias la='ls -a'
