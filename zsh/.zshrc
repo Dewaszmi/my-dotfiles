@@ -25,7 +25,6 @@ export PATH=$PATH:/home/dewaszmi/.cargo/bin
 # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 # eval "$(pyenv init - bash)"
 
-
 # ===============
 # === ALIASES ===
 # ===============
@@ -56,10 +55,13 @@ alias vi="nvim"
 alias y="yazi"
 alias t="tmux"
 alias ff="fastfetch"
-alias cj="carjacker"
+alias mutt="neomutt"
+alias qbt="qbittorrentui"
+# alias cj="carjacker"
 
 # Software
 alias sv="source .venv/bin/activate"
+alias kps="sh ~/stuff/keepass-tui/interactive-cli.sh $KEEPASS_DATABASE_PATH"
 
 # Git aliases
 alias lg="lazygit"
