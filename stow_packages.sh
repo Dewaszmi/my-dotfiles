@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 
 cd "$(dirname "$)")"
 
@@ -7,7 +7,7 @@ for package in *; do
     if [ "$package" = ".git" ]; then
       continue
     fi
-    echo "Stowing: $package
+    echo "Stowing: $package"
     stow "$package"
   fi
 done

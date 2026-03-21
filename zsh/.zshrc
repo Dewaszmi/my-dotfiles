@@ -62,6 +62,7 @@ alias qbt="qbittorrentui"
 # Software
 alias sv="source .venv/bin/activate"
 alias kps="sh ~/stuff/keepass-tui/interactive-cli.sh $KEEPASS_DATABASE_PATH"
+alias zconf="vi ~/.zshrc"
 
 # Git aliases
 alias lg="lazygit"
