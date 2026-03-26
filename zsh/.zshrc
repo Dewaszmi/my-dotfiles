@@ -1,35 +1,32 @@
-export ZSH="$HOME/.oh-my-zsh"
+# env variables
+export ZSH_COMPDUMP="$HOME/.cache/zcompdump/.zcompdump"
+export XDG_CONFIG_HOME="$HOME/.config"
+export EDITOR="nvim"
 
-ZSH_THEME="robbyrussell"
+# oh-my-zsh config
+export ZSH="$XDG_CONFIG_HOME/oh-my-zsh"
 
+# theme
+ZSH_THEME="dracula" # "robbyrussell"
+
+# oh-my-zsh plugins
 plugins=(
   git
-  dnf
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
 
-eval "$(zoxide init zsh)"
-
+# some path extensions
 export PATH=$PATH:/home/dewaszmi/.local/bin
-export ZSH_COMPDUMP="$HOME/.cache/zcompdump/.zcompdump"
-export EDITOR="nvim"
-
 export PATH=$PATH:/home/dewaszmi/.spicetify
 export PATH=$PATH:/home/dewaszmi/.cargo/bin
 
-# Pyenv
-# export PYENV_ROOT="$HOME/.pyenv"
-# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init - bash)"
+eval "$(zoxide init zsh)"
 
-# ===============
-# === ALIASES ===
-# ===============
-
-# Generic aliases
+# ===========================
+# aliases
 alias c="clear"
 alias rmf="rm -rf"
 alias md="mkdir -p"
@@ -40,29 +37,33 @@ mkcd () {
   cd "$1"
 }
 
-# Zoxide so i wont forget
+# zoxide so I wont forget
 alias cd="z"
 
-# Better ls
+# better ls
 alias ls='lsd'
 alias l='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
 
-# Apps
 alias vi="nvim"
 alias y="yazi"
-alias t="tmux"
 alias ff="fastfetch"
-alias mutt="neomutt"
-alias qbt="qbittorrentui"
-# alias cj="carjacker"
 
-# Software
+# tmux
+alias t="tmux"
+alias tn="tmux new-session -s"
+alias ta="tmux attach"
+alias td="tmux detach"
+alias tl="tmux list-sessions"
+alias tk="tmux kill-session -t"
+
+# other
 alias sv="source .venv/bin/activate"
 alias kps="sh ~/stuff/keepass-tui/interactive-cli.sh $KEEPASS_DATABASE_PATH"
-alias zconf="vi ~/.zshrc"
+alias zconf="vi $HOME/.zshrc"
+alias viconf="vi $XDG_CONFIG_HOME/nvim"
 
-# Git aliases
+# git aliases
 alias lg="lazygit"

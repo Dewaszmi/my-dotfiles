@@ -840,10 +840,10 @@ require("lazy").setup({
 					--    See the README about individual language/framework/plugin snippets:
 					--    https://github.com/rafamadriz/friendly-snippets
 					{
-					  'rafamadriz/friendly-snippets',
-					  config = function()
-					    require('luasnip.loaders.from_vscode').lazy_load()
-					  end,
+						"rafamadriz/friendly-snippets",
+						config = function()
+							require("luasnip.loaders.from_vscode").lazy_load()
+						end,
 					},
 				},
 				opts = {},
@@ -916,27 +916,27 @@ require("lazy").setup({
 		},
 	},
 
-	{ -- You can easily change to a different colorscheme.
-		-- Change the name of the colorscheme plugin below, and then
-		-- change the command in the config to whatever the name of that colorscheme is.
-		--
-		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"folke/tokyonight.nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
-		config = function()
-			---@diagnostic disable-next-line: missing-fields
-			require("tokyonight").setup({
-				styles = {
-					comments = { italic = false }, -- Disable italics in comments
-				},
-			})
-
-			-- Load the colorscheme here.
-			-- Like many other themes, this one has different styles, and you could load
-			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-night")
-		end,
-	},
+	-- { -- You can easily change to a different colorscheme.
+	-- 	-- Change the name of the colorscheme plugin below, and then
+	-- 	-- change the command in the config to whatever the name of that colorscheme is.
+	-- 	--
+	-- 	-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+	-- 	"Mofiqul/dracula.nvim",
+	-- 	priority = 1000, -- Make sure to load this before all the other start plugins.
+	-- 	config = function()
+	-- 		---@diagnostic disable-next-line: missing-fields
+	-- 		-- require("tokyonight").setup({
+	-- 		-- 	styles = {
+	-- 		-- 		comments = { italic = false }, -- Disable italics in comments
+	-- 		-- 	},
+	-- 		-- })
+	--
+	-- 		-- Load the colorscheme here.
+	-- 		-- Like many other themes, this one has different styles, and you could load
+	-- 		-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+	-- 		vim.cmd.colorscheme("dracula")
+	-- 	end,
+	-- },
 
 	-- Highlight todo, notes, etc in comments
 	{
@@ -964,6 +964,10 @@ require("lazy").setup({
 			-- - sr)'  - [S]urround [R]eplace [)] [']
 			require("mini.surround").setup()
 
+			-- Split / join arguments
+			-- gS - toggle split / join (only mapping I need :) )
+			require("mini.splitjoin").setup()
+
 			-- Simple and easy statusline.
 			--  You could remove this setup call if you don't like it,
 			--  and try some other statusline plugin
@@ -985,11 +989,15 @@ require("lazy").setup({
 	},
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+			"nvim-treesitter/nvim-treesitter-context",
+		},
 		build = ":TSUpdate",
 		main = "nvim-treesitter.config", -- Sets main module to use for opts
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 		opts = {
-			ensure_installed = { "bash", "html", "lua", "markdown", "markdown_inline", "python" },
+			ensure_installed = { "python", "bash", "rust", "lua", "html", "markdown", "markdown_inline" },
 			-- Autoinstall languages that are not installed
 			auto_install = true,
 			highlight = {
@@ -1000,14 +1008,55 @@ require("lazy").setup({
 				-- additional_vim_regex_highlighting = { "ruby" },
 			},
 			indent = { enable = true },
+			-- enable incremental selection
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "<C-space>",
+					node_incremental = "<C-space>",
+					scope_incremental = false,
+					node_decremental = "<bs>",
+				},
+			},
+			-- nvim-treesitter-textobjects
+			textobjects = {
+				select = {
+					enable = true,
+					lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+					keymaps = {
+						-- You can use the capture groups defined in textobjects.scm
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
+					},
+				},
+				move = {
+					enable = true,
+					set_jumps = true, -- whether to set jumps in the jumplist
+					goto_next_start = {
+						["]m"] = "@function.outer",
+						["]]"] = "@class.outer",
+					},
+					goto_previous_start = {
+						["[m"] = "@function.outer",
+						["[["] = "@class.outer",
+					},
+				},
+			},
 		},
-		-- There are additional nvim-treesitter modules that you can use to interact
-		-- with nvim-treesitter. You should go explore a few and see what interests you:
-		--
-		--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-		--
-		--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-		--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		opts = {
+			max_lines = 3,
+			min_window_height = 0,
+			line_numbers = true,
+			multiline_threshhold = 20,
+			trim_scope = "outer",
+			mode = "cursor",
+			separator = nil,
+		},
 	},
 
 	-- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1061,13 +1110,3 @@ require("lazy").setup({
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --
-
--- Go to next tab
-vim.keymap.set("n", "]t", "gt", { desc = "Next Tab" })
-
--- Go to previous tab
-vim.keymap.set("n", "[t", "gT", { desc = "Previous Tab" })
-
-vim.keymap.set("n", "<leader>t", ":terminal<CR>")
-
-vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
