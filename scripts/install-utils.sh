@@ -17,5 +17,3 @@ rm master.zip
 
 # tmux
 git clone https://github.com/tmux-plugins/tpm "$HOME/.config/tmux/plugins/tpm"
-
-exec zsh # source zsh config for the plugins to register
