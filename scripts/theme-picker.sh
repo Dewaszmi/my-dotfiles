@@ -34,3 +34,8 @@ pick_and_link \
   "$XDG_CONFIG_HOME/nvim/lua/custom/themes" \
   "$XDG_CONFIG_HOME/nvim/lua/custom/plugins/theme.lua" \
   "Choose theme for nvim"
+
+pick_and_link \
+  "$XDG_CONFIG_HOME/spicetify/Themes" \
+  "$XDG_CONFIG_HOME/spicetify/Themes/Theme" \
+  "Choose theme for spicetify"

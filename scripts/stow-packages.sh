@@ -9,7 +9,6 @@ for package in *; do
         continue
         ;;
       *)
-        echo "Stowing: $package"
         stow "$package"
     esac
   fi
