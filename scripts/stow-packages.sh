@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# just automates stowing
+
 cd "$(dirname "$)")" || exit
 
 for package in *; do
